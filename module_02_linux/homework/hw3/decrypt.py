@@ -35,13 +35,79 @@ $ echo  ‘абраа..-.кадабра’ | python3 decrypt.py
 """
 
 import sys
+from time import time
 
 
 def decrypt(encryption: str) -> str:
-    ...
+    decrypted_temp = ''
+
+    decrypted_list = encryption.split('..')
+
+    for elem in decrypted_list:
+
+        if len(elem) == 0:
+
+            if len(decrypted_temp) >= 1:
+                decrypted_temp = decrypted_temp[:-1]
+
+        else:
+            decrypted_temp += elem
+
+    decrypted_list = decrypted_temp.split('.')
+
+    return ''.join(decrypted_list)
+
+
+def decrypt_2(encryption: str) -> str:
+    decrypted = ''
+    point_count = 0
+
+    for letter in encryption:
+
+        if letter == '.':
+            point_count += 1
+        else:
+            decrypted += letter
+
+        if point_count == 2:
+
+            if len(decrypted) >= 1:
+                decrypted = decrypted[:-1]
+
+            point_count = 0
+
+    return decrypted
+
+
+def decrypt_3(encryption: str) -> str:
+    decrypted_temp = []
+
+    for symbol in encryption:
+        decrypted_temp.append(symbol)
+
+        if len(decrypted_temp) > 2 and (decrypted_temp[-1], decrypted_temp[-2]) == ('.', '.'):
+            decrypted_temp.pop()
+            decrypted_temp.pop()
+
+            if decrypted_temp:
+                decrypted_temp.pop()
+
+    return ''.join(symbol for symbol in decrypted_temp if symbol != '.')
 
 
 if __name__ == '__main__':
     data: str = sys.stdin.read()
     decryption: str = decrypt(data)
     print(decryption)
+
+# Проверил скорость работы всех алгоритм
+# Всё же алгоритм №1 намного быстрее, чем алгоритм рассмотренный в разборе домашнего задания)
+
+# word = 'абраа..-.кадабра'
+# start = time()
+#
+# for _ in range(1000000):
+#     decrypt(word)
+#
+# print(time() - start)
+

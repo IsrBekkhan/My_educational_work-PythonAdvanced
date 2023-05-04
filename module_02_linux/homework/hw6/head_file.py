@@ -30,13 +30,28 @@ hello world!
 """
 
 from flask import Flask
+from os.path import abspath, exists, join
 
 app = Flask(__name__)
 
 
 @app.route("/head_file/<int:size>/<path:relative_path>")
 def head_file(size: int, relative_path: str):
-    ...
+    project_path = abspath('')
+    relative_path_list = relative_path.split('/')
+    file_abs_path = join(project_path, *relative_path_list)
+
+    if exists(file_abs_path):
+
+        with open(file_abs_path, 'r') as text_file:
+            result_text = text_file.read(size)
+            result_size = len(result_text)
+            status_code = 200
+
+            return f'<b>{file_abs_path}</b> {result_size}<br>{result_text}', status_code
+
+    status_code = 404
+    return 'Файл не найден', status_code
 
 
 if __name__ == "__main__":

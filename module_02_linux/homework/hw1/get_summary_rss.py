@@ -15,10 +15,38 @@ $ ps aux > output_file.txt
 
 
 def get_summary_rss(ps_output_file_path: str) -> str:
-    ...
+    total_size = 0
+    description = 'Объём потребляемой памяти'
+
+    with open(ps_output_file_path, 'r') as output_file:
+        lines = output_file.readlines()[1:]
+        bytes_in_kb = 1024
+        bytes_in_mb = 1048576
+        bytes_in_gb = 1073741824
+
+        for line in lines:
+
+            if len(line) > 4:
+                line_elements = line.split()
+                total_size += int(line_elements[5])
+
+        if total_size <= bytes_in_kb:
+            return f'{description}: {total_size} B'
+
+        if total_size <= bytes_in_mb:
+            size = total_size / bytes_in_kb
+            return f'{description}: {int(size)} kB'
+
+        if total_size <= bytes_in_gb:
+            size = total_size / bytes_in_mb
+            return f'{description}: {int(size)} MB'
+
+        if total_size > bytes_in_gb:
+            size = total_size / bytes_in_gb
+            return f'{description}: {int(size)} GB'
 
 
 if __name__ == '__main__':
-    path: str = 'PATH_TO_OUTPUT_FILE'
+    path: str = 'output_file.txt'
     summary_rss: str = get_summary_rss(path)
     print(summary_rss)

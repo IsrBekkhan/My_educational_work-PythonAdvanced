@@ -13,6 +13,7 @@
 """
 
 from flask import Flask
+from datetime import datetime
 
 app = Flask(__name__)
 
@@ -21,8 +22,10 @@ storage = {}
 
 @app.route("/add/<date>/<int:number>")
 def add(date: str, number: int) -> str:
-    year = int(date[:4])
-    month = int(date[4:6])
+    date_object = datetime.strptime(date, '%Y%m%d')
+
+    year = date_object.year
+    month = date_object.month
 
     storage.setdefault(year, {}).setdefault(month, 0)
     storage[year][month] += number
@@ -32,22 +35,36 @@ def add(date: str, number: int) -> str:
 
 @app.route("/calculate/<int:year>")
 def calculate_year(year: int) -> str:
+    date_object = datetime.strptime(str(year), '%Y')
+    year_ = date_object.year
+
     total_expense = 0
-    year_expense = storage.get(year)
+    year_expense = storage.get(year_)
 
     if year_expense:
 
         for expense in year_expense.values():
             total_expense += expense
 
-    return f'Расход за {year} год: {total_expense} руб.'
+    return f'Расход за {year_} год: {total_expense} руб.'
 
 
 @app.route("/calculate/<int:year>/<int:month>")
 def calculate_month(year: int, month: int) -> str:
-    result = storage.get(year, {}).get(month, '0')
 
-    return f'Расход за {month}-{year}: {result} руб.'
+    if month < 10:
+        month_str = ''.join(('0', str(month)))
+    else:
+        month_str = str(month)
+
+    date_str = ''.join((str(year), month_str))
+    date_object = datetime.strptime(date_str, '%Y%m')
+    year_ = date_object.year
+    month_ = date_object.month
+
+    result = storage.get(year_, {}).get(month_, '0')
+
+    return f'Расход за {month_}-{year_}: {result} руб.'
 
 
 if __name__ == "__main__":

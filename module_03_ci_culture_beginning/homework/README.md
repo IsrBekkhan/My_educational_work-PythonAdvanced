@@ -166,7 +166,7 @@ $ ./script.sh
 - Пример определения кода возврата:
 
 ```shell
-pylint file.py
+pylint program.py
 pylint_res=$?
 if [[ pylint_res -eq 0 ]]; then
   echo 'Pylint OK'

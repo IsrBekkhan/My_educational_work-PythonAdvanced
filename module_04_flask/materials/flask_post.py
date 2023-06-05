@@ -6,6 +6,8 @@ from flask import Flask, request
 app = Flask(__name__)
 
 
+# команда запроса curl: curl -X POST -F "array1=1" -F "array1=2" -F "array1=3" -F "array2=1" -F "array2=1" -F
+# "array2=1"  http://localhost:5000/sum
 @app.route("/sum", methods=["POST"])
 def _sum():
     array1 = request.form.getlist("array1", type=int)
@@ -16,6 +18,7 @@ def _sum():
     return f"Array of sums is [{result}]"
 
 
+#  команда запроса curl: curl -X POST -d 'array1=1,2,3&array2=1,1,1' http://localhost:5000/sum2
 @app.route("/sum2", methods=["POST"])
 def _sum2():
     form_data = request.get_data(as_text=True)
@@ -35,9 +38,12 @@ def _sum2():
     return f"Your result is [{result_str}]"
 
 
+#  команда запроса curl: curl -X POST -H "Content-Type: application/json"
+#  -d '{"array1": [1, 2, 3], "array2": [1, 1, 1]}' http://localhost:5000/sum3
 @app.route("/sum3", methods=["POST"])
 def _sum3_json():
     form_data = request.get_data(as_text=True)
+    print(form_data)
 
     data_object = json.loads(form_data)
 

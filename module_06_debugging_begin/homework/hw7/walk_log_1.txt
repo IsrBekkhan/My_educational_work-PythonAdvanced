@@ -1,0 +1,7 @@
+INFO:Visiting <BinaryTreeNode[1]>
+DEBUG:<BinaryTreeNode[1]> left is not empty. Adding <BinaryTreeNode[2]> to the queue
+DEBUG:<BinaryTreeNode[1]> right is not empty. Adding <BinaryTreeNode[4]> to the queue
+INFO:Visiting <BinaryTreeNode[2]>
+DEBUG:<BinaryTreeNode[2]> right is not empty. Adding <BinaryTreeNode[3]> to the queue
+INFO:Visiting <BinaryTreeNode[4]>
+INFO:Visiting <BinaryTreeNode[3]>

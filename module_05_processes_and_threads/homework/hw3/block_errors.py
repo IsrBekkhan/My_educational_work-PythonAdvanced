@@ -11,8 +11,8 @@ class BlockErrors:
     def __init__(self, errors: Collection) -> None:
         self.errors = tuple(errors)
 
-    def __enter__(self) -> None:
-        pass
+    def __enter__(self) -> object:
+        return self
 
     def __exit__(
             self,

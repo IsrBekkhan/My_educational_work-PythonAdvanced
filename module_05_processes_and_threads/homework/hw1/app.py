@@ -12,7 +12,13 @@
 """
 from typing import List
 
+import subprocess
+import shlex
+from os import kill
+from signal import SIGKILL
+
 from flask import Flask
+
 
 app = Flask(__name__)
 
@@ -27,7 +33,19 @@ def get_pids(port: int) -> List[int]:
         raise ValueError
 
     pids: List[int] = []
-    ...
+
+    command_str = 'lsof -i:{}'.format(port)
+    command = shlex.split(command_str)
+
+    process: subprocess.CompletedProcess = subprocess.run(command, capture_output=True)
+
+    if process.returncode == 0:
+        processes_list = process.stdout.decode().splitlines()[1:]
+
+        for process_str in processes_list:
+            pid = process_str.split()[1]
+            pids.append(int(pid))
+
     return pids
 
 
@@ -37,7 +55,11 @@ def free_port(port: int) -> None:
     @param port: порт
     """
     pids: List[int] = get_pids(port)
-    ...
+
+    if pids:
+
+        for pid in pids:
+            kill(pid, SIGKILL)
 
 
 def run(port: int) -> None:
@@ -52,3 +74,4 @@ def run(port: int) -> None:
 
 if __name__ == '__main__':
     run(5000)
+

@@ -1,4 +1,5 @@
 import time
+import sys
 
 
 def main():
@@ -8,10 +9,10 @@ def main():
 
 
 # def main():
-#    print('Print to stdout')
-#    print('Print to stderr', file=sys.stderr)
-#    user_input = input()
-#    print('User input: "{}"'.format(user_input))
+#     print('Print to stdout')
+#     print('Print to stderr', file=sys.stderr)
+#     # user_input = input()
+#     # print('User input: "{}"'.format(user_input))
 
 
 if __name__ == '__main__':

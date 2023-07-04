@@ -24,19 +24,25 @@ logger.info('Сообщение')
 
 Вам нужно дописать метод process так, чтобы в логах была всегда JSON-валидная строка.
 """
-
+import json
 import logging
 
 
 class JsonAdapter(logging.LoggerAdapter):
     def process(self, msg, kwargs):
-        new_message = msg
+        new_message = json.dumps(msg, ensure_ascii=False)
+
         return new_message, kwargs
 
 
 if __name__ == '__main__':
+    logging.basicConfig(filename='skillbox_json_messages.log',
+                        encoding='utf-8',
+                        format='{"time": "%(asctime)s", "level": "%(levelname)s", "message": %(message)s}',
+                        datefmt='%I:%M:%S')
     logger = JsonAdapter(logging.getLogger(__name__))
     logger.setLevel(logging.DEBUG)
+
     logger.info('Сообщение')
     logger.error('Кавычка)"')
     logger.debug("Еще одно сообщение")

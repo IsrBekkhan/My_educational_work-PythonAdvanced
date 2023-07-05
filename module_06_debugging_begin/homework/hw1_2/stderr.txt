@@ -1,0 +1,67 @@
+11:45:02 - password_checker - INFO - Вы пытаетесь аутентифицироваться в Skillbox
+11:45:02 - password_checker - INFO - У вас есть 3 попыток
+11:45:02 - password_checker - DEBUG - Начало input_and_check_password
+11:45:04 - password_checker - WARNING - Вы ввели слишком слабый пароль
+11:45:04 - password_checker - DEBUG - Начало input_and_check_password
+11:45:07 - password_checker - WARNING - Вы ввели слишком слабый пароль
+11:45:07 - password_checker - DEBUG - Начало input_and_check_password
+11:45:09 - password_checker - WARNING - Вы ввели слишком слабый пароль
+11:45:09 - password_checker - ERROR - Пользователь трижды ввёл не правильный пароль!
+03:10:11 - password_checker - INFO - Вы пытаетесь аутентифицироваться в Skillbox
+03:10:11 - password_checker - INFO - У вас есть 3 попыток
+03:10:11 - password_checker - DEBUG - Начало input_and_check_password
+03:10:47 - password_checker - INFO - Вы пытаетесь аутентифицироваться в Skillbox
+03:10:47 - password_checker - INFO - У вас есть 3 попыток
+03:10:47 - password_checker - DEBUG - Начало input_and_check_password
+03:11:45 - password_checker - INFO - Вы пытаетесь аутентифицироваться в Skillbox
+03:11:45 - password_checker - INFO - У вас есть 3 попыток
+03:11:45 - password_checker - DEBUG - Начало input_and_check_password
+03:15:35 - password_checker - INFO - Вы пытаетесь аутентифицироваться в Skillbox
+03:15:35 - password_checker - INFO - У вас есть 3 попыток
+03:15:35 - password_checker - DEBUG - Начало input_and_check_password
+03:16:13 - password_checker - INFO - Вы пытаетесь аутентифицироваться в Skillbox
+03:16:13 - password_checker - INFO - У вас есть 3 попыток
+03:16:13 - password_checker - DEBUG - Начало input_and_check_password
+03:45:29 - password_checker - DEBUG - Создание генератора со всеми словами английского языка.
+03:45:29 - password_checker - INFO - Вы пытаетесь аутентифицироваться в Skillbox
+03:45:29 - password_checker - INFO - У вас есть 3 попыток
+03:45:29 - password_checker - DEBUG - Начало input_and_check_password
+03:45:42 - password_checker - DEBUG - Проверка сложности пароля.
+03:45:44 - password_checker - DEBUG - Начало input_and_check_password
+03:45:50 - password_checker - DEBUG - Проверка сложности пароля.
+03:45:50 - password_checker - DEBUG - Начало input_and_check_password
+03:45:57 - password_checker - DEBUG - Проверка сложности пароля.
+03:45:57 - password_checker - ERROR - Пользователь трижды ввёл не правильный пароль!
+03:48:11 - password_checker - DEBUG - Создание генератора со всеми словами английского языка.
+03:48:11 - password_checker - INFO - Вы пытаетесь аутентифицироваться в Skillbox
+03:48:11 - password_checker - INFO - У вас есть 3 попыток
+03:48:11 - password_checker - DEBUG - Начало input_and_check_password
+03:48:18 - password_checker - DEBUG - Проверка сложности пароля.
+03:48:20 - password_checker - DEBUG - Начало input_and_check_password
+03:48:41 - password_checker - DEBUG - Проверка сложности пароля.
+03:48:41 - password_checker - DEBUG - Начало input_and_check_password
+03:48:48 - password_checker - DEBUG - Проверка сложности пароля.
+03:48:48 - password_checker - ERROR - Пользователь трижды ввёл не правильный пароль!
+03:52:11 - password_checker - DEBUG - Создание генератора со всеми словами английского языка.
+03:52:11 - password_checker - INFO - Вы пытаетесь аутентифицироваться в Skillbox
+03:52:11 - password_checker - INFO - У вас есть 3 попыток
+03:52:11 - password_checker - DEBUG - Начало input_and_check_password
+03:52:16 - password_checker - DEBUG - Проверка сложности пароля.
+03:52:17 - password_checker - WARNING - Вы ввели слишком слабый пароль
+03:52:17 - password_checker - DEBUG - Начало input_and_check_password
+03:52:27 - password_checker - DEBUG - Проверка сложности пароля.
+03:52:28 - password_checker - DEBUG - Начало input_and_check_password
+03:52:41 - password_checker - DEBUG - Проверка сложности пароля.
+03:52:41 - password_checker - ERROR - Пользователь трижды ввёл не правильный пароль!
+03:52:49 - password_checker - DEBUG - Создание генератора со всеми словами английского языка.
+03:52:49 - password_checker - INFO - Вы пытаетесь аутентифицироваться в Skillbox
+03:52:49 - password_checker - INFO - У вас есть 3 попыток
+03:52:49 - password_checker - DEBUG - Начало input_and_check_password
+03:52:53 - password_checker - DEBUG - Проверка сложности пароля.
+03:52:55 - password_checker - WARNING - Вы ввели слишком слабый пароль
+03:52:55 - password_checker - DEBUG - Начало input_and_check_password
+03:53:12 - password_checker - DEBUG - Проверка сложности пароля.
+03:53:12 - password_checker - WARNING - Вы ввели слишком слабый пароль
+03:53:12 - password_checker - DEBUG - Начало input_and_check_password
+03:53:36 - password_checker - DEBUG - Проверка сложности пароля.
+03:53:37 - password_checker - ERROR - Пользователь трижды ввёл не правильный пароль!

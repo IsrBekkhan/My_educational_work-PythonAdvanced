@@ -21,6 +21,7 @@ import random
 from collections import deque
 from dataclasses import dataclass
 from typing import Optional
+from restore_tree import restore_tree
 
 logger = logging.getLogger("tree_walk")
 
@@ -70,16 +71,21 @@ def get_tree(max_depth: int, level: int = 1) -> Optional[BinaryTreeNode]:
     return node
 
 
-def restore_tree(path_to_log_file: str) -> BinaryTreeNode:
-    pass
+def restore_tree_func(path_to_log_file: str) -> BinaryTreeNode:
+    """
+    Функция, вызывающая другую функцию из файла 'restore_tree.py'
+
+    """
+    return restore_tree(path_to_log_file)
 
 
 if __name__ == "__main__":
     logging.basicConfig(
         level=logging.DEBUG,
         format="%(levelname)s:%(message)s",
-        filename="walk_log_4.txt",
+        filename="walk_log_5.txt",
     )
 
     root = get_tree(7)
     walk(root)
+

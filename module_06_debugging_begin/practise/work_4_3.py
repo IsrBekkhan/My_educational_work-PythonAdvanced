@@ -17,6 +17,7 @@
 import json
 import logging
 import os
+from datetime import date
 
 from flask import Flask
 
@@ -41,13 +42,50 @@ def account(department: str, account_number: int):
 
     account_data_file = os.path.join(full_department_path, f"{account_number}.json")
 
-    with open(account_data_file, "r") as fi:
-        account_data_txt = fi.read()
+    try:
+        with open(account_data_file, "r", encoding='utf-8') as fi:
+            account_data_txt = fi.read()
+    except FileNotFoundError as ex:
+        exc_message = f'Файл {departments[department]}/{account_number}.json не найден'
+        logger.exception(exc_message, exc_info=ex)
+        return exc_message, 404
 
-    account_data_json = json.loads(account_data_txt)
+    try:
+        account_data_json = json.loads(account_data_txt)
+    except json.decoder.JSONDecodeError as ex:
+        exc_message = f'Ошибка кодирования содержимого файла {departments[department]}/{account_number}.json в словарь.'
+        logger.exception(
+            exc_message,
+            exc_info=ex)
+        return exc_message, 400
 
-    name, birth_date = account_data_json["name"], account_data_json["birth_date"]
-    day, month, _ = birth_date.split(".")
+    try:
+        name, birth_date = account_data_json["name"], account_data_json["birth_date"]
+
+        if not name:
+            exc_message = f"Нет имени в файле {departments[department]}/{account_number}.json"
+            logger.warning(exc_message)
+            return exc_message, 400
+
+    except KeyError as ex:
+        exc_message = f'Ошибка в синтаксисе данных файла {departments[department]}/{account_number}.json'
+        logger.exception(exc_message, exc_info=ex)
+        return exc_message, 400
+
+    try:
+        day, month, _ = birth_date.split(".")
+    except ValueError as ex:
+        exc_message = f'Неверная дата в файле {departments[department]}/{account_number}.json'
+        logger.exception(exc_message, exc_info=ex)
+        return exc_message, 400
+
+    try:
+        date(day=int(day), month=int(month), year=int(_))
+    except ValueError as ex:
+        exc_message = f'Неверная дата в файле {departments[department]}/{account_number}.json'
+        logger.exception(exc_message, exc_info=ex)
+        return exc_message, 400
+
     return f"{name} was born on {day}.{month}"
 
 

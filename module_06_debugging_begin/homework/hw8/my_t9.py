@@ -18,10 +18,47 @@
 и возвращает список слов английского языка, которые можно получить из этой последовательности цифр.
 """
 from typing import List
+from re import findall
+
+
+phone_keys = {
+    '2': 'abc',
+    '3': 'def',
+    '4': 'ghi',
+    '5': 'jkl',
+    '6': 'mno',
+    '7': 'pqrs',
+    '8': 'tuv',
+    '9': 'wxyz'
+}
 
 
 def my_t9(input_numbers: str) -> List[str]:
-    ...
+    pattern = ''
+
+    for number in input_numbers:
+
+        if number == '1' or number == '0':
+            continue
+
+        letters: str = phone_keys[number]
+        pattern_path = f'[{letters}{letters.upper()}]'
+        pattern += pattern_path
+
+    word_length = len(input_numbers)
+    found_words = list()
+
+    with open('../hw1_2/words.txt', 'r') as words_file:
+
+        for word in words_file.readlines():
+
+            if len(word.rstrip()) == word_length:
+
+                result = findall(pattern, word)
+
+                if result:
+                    found_words.append(*result)
+    return found_words
 
 
 if __name__ == '__main__':

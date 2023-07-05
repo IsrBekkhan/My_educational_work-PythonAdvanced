@@ -13,7 +13,8 @@ timsort (стандартная сортировка python) и сортиров
 import heapq
 import json
 import logging
-from typing import List
+from time import time
+from typing import List, Callable
 
 from flask import Flask, request
 
@@ -22,6 +23,23 @@ app = Flask(__name__)
 logger = logging.getLogger("sort")
 
 
+def logging_and_time_measurement(func: Callable):
+    def wrapped_func(*args):
+        logger.debug(f'Запуск функции {func.__name__}: {args}')
+        start = time()
+        result = func(*args)
+        end = time()
+        processing_time = end - start
+        print(processing_time)
+        logger.info(f'Время сортировки: {processing_time}. Результат {result}')
+        logger.debug(f'Конец {time()}')
+
+        return result
+
+    return wrapped_func
+
+
+@logging_and_time_measurement
 def bubble_sort(array: List[int]) -> List[int]:
     n = len(array)
 
@@ -33,12 +51,14 @@ def bubble_sort(array: List[int]) -> List[int]:
     return array
 
 
+@logging_and_time_measurement
 def tim_sort(array: List[int]) -> List[int]:
     array.sort()
 
     return array
 
 
+@logging_and_time_measurement
 def heap_sort(array: List[int]) -> List[int]:
     data = []
 
@@ -57,14 +77,19 @@ algorithms = {
 
 @app.route("/<algorithm_name>/", methods=["POST"])
 def sort_endpoint(algorithm_name: str):
+    logger.debug(f"Алгоритм {algorithm_name}")
+
     if algorithm_name not in algorithms:
+        logger.warning(f'Алгоритм с названием {algorithm_name} нет на сервере.')
         return f"Bad algorithm name, acceptable values are {algorithms.keys()}", 400
 
     form_data = request.get_data(as_text=True)
+    logger.debug(f'Тело запроса: {form_data}')
 
     array = json.loads(form_data)
 
     result = algorithms[algorithm_name](array)
+    logger.debug(f'Результат сортировки: {result}')
 
     return json.dumps(result)
 

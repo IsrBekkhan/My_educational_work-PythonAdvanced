@@ -60,7 +60,9 @@ def measure_me(nums: List[int]) -> List[List[int]]:
 
 
 if __name__ == "__main__":
-    logging.basicConfig(level="DEBUG")
+    logging.basicConfig(level="DEBUG",
+                        filename='results.log',
+                        format='{"time": "%(asctime)s", "message": "%(message)s"}')
     for it in range(15):
         data_line = get_data_line(10 ** 3)
         measure_me(data_line)

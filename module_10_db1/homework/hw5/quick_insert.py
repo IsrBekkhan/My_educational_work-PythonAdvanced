@@ -4,7 +4,16 @@ Number = Union[int, float, complex]
 
 
 def find_insert_position(array: List[Number], number: Number) -> int:
-    ...
+
+    for index in range(len(array)):
+
+        if number < array[index]:
+            return index
+
+        if index == len(array) - 1:
+            return len(array)
+
+    return 0
 
 
 if __name__ == '__main__':

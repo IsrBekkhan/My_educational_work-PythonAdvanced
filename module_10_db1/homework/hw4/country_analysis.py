@@ -3,7 +3,7 @@ import sqlite3
 
 if __name__ == '__main__':
 
-    with sqlite3.connect('hw_4_database.db') as connect:
+    with (sqlite3.connect('hw_4_database.db') as connect):
         cursor = connect.cursor()
 
         # решение задачи 1
@@ -11,40 +11,49 @@ if __name__ == '__main__':
                        "FROM salaries "
                        "WHERE salary < 5000")
         result = cursor.fetchone()
-        print('Количество людей с доходом ниже 5000 гульденов:', result[0])
+        print('4.1. Количество людей с доходом ниже 5000 гульденов:', result[0])
 
         # решение задачи 2
         cursor.execute("SELECT ROUND(AVG(salary), 2) FROM salaries")
         result = cursor.fetchone()
-        print('Средняя зарплата:', result[0])
+        print('4.2. Средняя зарплата:', result[0])
 
         # решение задачи 3
-        cursor.execute("SELECT COUNT(*) FROM salaries")
-        people_count = cursor.fetchone()[0]
+        people_count = "SELECT COUNT(*) FROM salaries"
+        half_count = "SELECT COUNT(*) / 2 FROM salaries"
+        table_half_if_even = f"SELECT salary FROM salaries LIMIT ({half_count}) - 1, 2"
+        table_half_if_odd = f"SELECT salary FROM salaries LIMIT ({half_count}) - 1, 1"
 
-        if people_count % 2 == 0:
-            cursor.execute(f"SELECT salary FROM salaries LIMIT {(people_count/2) - 1}, 2")
-            result = [elem[0] for elem in cursor.fetchall()]
-            median_salary = sum(result)/2
+        query = (f"SELECT IIF (({people_count}) % 2 == 0, "
+                 f"(SELECT SUM(salary) / 2 FROM ({table_half_if_even})), "
+                 f"(SELECT salary FROM ({table_half_if_odd})))")
 
-        else:
-            cursor.execute(f"SELECT salary FROM salaries LIMIT {(people_count/2) - 1}, 1")
-            median_salary = cursor.fetchone()
+        cursor.execute(query)
+        median = cursor.fetchone()[0]
 
-        print('Медианная зарплата:', median_salary)
+        print('4.3. Медианная зарплата:', median)
 
-        # решение задачи 4
-        cursor.execute("SELECT SUM(salary) FROM ("
-                       "SELECT salary FROM salaries "
-                       "ORDER BY salary DESC "
-                       "LIMIT (SELECT COUNT(*) FROM salaries) * 0.1)")
-        T = cursor.fetchone()[0]
+        # 4. Посчитать число социального неравенства F, определяемое как `F = T/K`,
+        # где `T` — суммарный доход 10% самых обеспеченных жителей острова `N, K` — суммарный доход остальных 90% людей.
+        # Вывести ответ в процентах с точностью до двух знаков после запятой.
 
-        cursor.execute("SELECT SUM(salary) FROM ("
-                       "SELECT salary FROM salaries "
-                       "ORDER BY salary "
-                       "LIMIT (SELECT COUNT(*) FROM salaries) * 0.9)")
-        K = cursor.fetchone()[0]
+        # В один SQL-запрос
 
-        print('Число социального неравенства:', round(T / K, 2))
+        PERCENT_10 = 'SELECT 0.1 * COUNT(*) FROM salaries'
+        T_salaries = f'SELECT salary FROM salaries ORDER BY salary DESC LIMIT ({PERCENT_10})'
+        T_sum = f'SELECT SUM(salary) FROM ({T_salaries})'
+        T = f'CAST(({T_sum}) AS FLOAT)'
+
+        PERCENT_90 = 'SELECT 0.9 * COUNT(*) FROM salaries'
+        K_salaries = f'SELECT salary FROM salaries ORDER BY salary LIMIT ({PERCENT_90})'
+        K_sum = f'SELECT SUM(salary) FROM ({K_salaries})'
+        K = f'CAST(({K_sum}) AS FLOAT)'
+
+        F = f'SELECT ROUND(100 * {T} / {K}, 2) as percent'
+        cursor.execute(F)
+
+        result, *_ = cursor.fetchone()
+        print('4.4. Число социального неравенства, %:', result)
+
+
 

@@ -17,25 +17,25 @@ class Philosopher(threading.Thread):
 
     def run(self):
         while self.running:
-            logger.info(f'Philosopher {self.getName()} start thinking.')
+            logger.info(f'Philosopher {self.name} start thinking.')
             # Philosopher is thinking (but really is sleeping).
             time.sleep(random.randint(1, 5))
-            logger.info(f'Philosopher {self.getName()} is hungry.')
+            logger.info(f'Philosopher {self.name} is hungry.')
             self.left_fork.acquire()
             time.sleep(random.randint(1, 5))
-            logger.info(f'Philosopher {self.getName()} acquired left fork')
+            logger.info(f'Philosopher {self.name} acquired left fork')
             try:
                 self.right_fork.acquire()
-                logger.info(f'Philosopher {self.getName()} acquired right fork')
+                logger.info(f'Philosopher {self.name} acquired right fork')
                 self.dining()
             finally:
                 self.left_fork.release()
                 self.right_fork.release()
 
     def dining(self):
-        logger.info(f'Philosopher {self.getName()} starts eating.')
+        logger.info(f'Philosopher {self.name} starts eating.')
         time.sleep(random.randint(1, 5))
-        logger.info(f'Philosopher {self.getName()} finishes eating and leaves to think.')
+        logger.info(f'Philosopher {self.name} finishes eating and leaves to think.')
 
 
 def main():

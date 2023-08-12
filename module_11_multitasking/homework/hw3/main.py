@@ -5,6 +5,7 @@ import time
 from typing import List
 
 TOTAL_TICKETS: int = 10
+TOTAL_SEATS: int = 100
 
 logging.basicConfig(level=logging.INFO)
 logger: logging.Logger = logging.getLogger(__name__)
@@ -20,6 +21,7 @@ class Seller(threading.Thread):
 
     def run(self) -> None:
         global TOTAL_TICKETS
+
         is_running: bool = True
         while is_running:
             self.random_sleep()
@@ -31,13 +33,42 @@ class Seller(threading.Thread):
                 logger.info(f'{self.name} sold one;  {TOTAL_TICKETS} left')
         logger.info(f'Seller {self.name} sold {self.tickets_sold} tickets')
 
-    def random_sleep(self) -> None:
+    @staticmethod
+    def random_sleep() -> None:
         time.sleep(random.randint(0, 1))
+
+
+class ChiefDirector(threading.Thread):
+
+    def __init__(self, semaphore: threading.Semaphore) -> None:
+        super().__init__()
+        self.sem: threading.Semaphore = semaphore
+        self.tickets_printed: int = 0
+        logger.info('Chief director printing tickets')
+
+    def run(self) -> None:
+        global TOTAL_TICKETS, TOTAL_SEATS
+        TOTAL_SEATS -= TOTAL_TICKETS
+
+        while TOTAL_SEATS:
+            if TOTAL_TICKETS < 4:
+                with self.sem:
+                    tickets_to_print = 10 - (TOTAL_TICKETS % 10)
+                    if tickets_to_print > TOTAL_SEATS:
+                        tickets_to_print = TOTAL_SEATS
+                    TOTAL_TICKETS += tickets_to_print
+                    TOTAL_SEATS -= tickets_to_print
+                    self.tickets_printed += tickets_to_print
+                    logger.info(f'Chief director printed new tickets;  {TOTAL_TICKETS} left')
+        logger.info(f'Chief director printed {self.tickets_printed} tickets')
 
 
 def main() -> None:
     semaphore: threading.Semaphore = threading.Semaphore()
-    sellers: List[Seller] = []
+    director = ChiefDirector(semaphore)
+    director.start()
+    sellers: List[Seller] = [director]
+
     for _ in range(4):
         seller = Seller(semaphore)
         seller.start()

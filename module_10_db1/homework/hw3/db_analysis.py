@@ -12,18 +12,15 @@ if __name__ == '__main__':
 
             print(f'Количество записей в table_{i}: {result[0]}')
 
-
         cursor.execute("SELECT COUNT(DISTINCT id) unique_count FROM table_1")
         result = cursor.fetchone()
         print('\nКоличество уникальных записей в table_1:', result[0])
-
 
         cursor.execute("SELECT COUNT(*) 'count' "
                        "FROM table_1 t1 "
                        "JOIN table_2 t2 ON t1.id = t2.id and t1.value = t2.value")
         result = cursor.fetchone()
         print('\nКоличество записей из table_1, встречающиеся в table_2:', result[0])
-
 
         cursor.execute("SELECT COUNT(*) 'count' "
                        "FROM table_1 t1 "

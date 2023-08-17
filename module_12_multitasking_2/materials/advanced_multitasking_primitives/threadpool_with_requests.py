@@ -48,6 +48,6 @@ def task_execution_with_processpool():
 
 
 if __name__ == '__main__':
-    sequential_approach()
+    #sequential_approach()
     task_execution_with_threadpool()
     task_execution_with_processpool()

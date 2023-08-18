@@ -52,4 +52,6 @@ def high_load_map():
 
 
 if __name__ == '__main__':
+    # apply_async()
+    # map()
     high_load_map()

@@ -20,11 +20,15 @@ def fun2():
         time.sleep(0.25)
 
 
-t1: Thread = Thread(target=fun1)
-t2: Thread = Thread(target=fun2)
+# Данный метод не работает в Windows - что в консоли, что в Pycharm'e
+# Работает в терминале linux (ctrl + C) и в Pycharm'e под linux'ом (ctrl + F2)
+t1: Thread = Thread(target=fun1, daemon=True)
+t2: Thread = Thread(target=fun2, daemon=True)
 try:
     t1.start()
     t2.start()
+    t1.join()
+    t2.join()
 except KeyboardInterrupt:
     print('\nReceived keyboard interrupt, quitting threads.')
     exit(1)

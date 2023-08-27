@@ -10,12 +10,18 @@ defeated_enemies = [
     "Кузнецов К.",
 ]
 
+remove_request = """
+DELETE FROM table_enemies
+WHERE name = ?
+"""
+
 
 def remove_all_defeated_enemies(
         c: sqlite3.Cursor,
         defeated_enemies: List[str]
 ) -> None:
-    ...
+    for name in defeated_enemies:
+        c.execute(remove_request, (name, ))
 
 
 if __name__ == "__main__":

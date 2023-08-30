@@ -1,0 +1,275 @@
+{
+  "info": {
+    "_postman_id": "3c10e80c-dc5e-44dd-9cda-4b3d5ea8de14",
+    "name": "maturity_level",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "level_0",
+      "item": [
+        {
+          "name": "get_slots_requests",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"date\": \"2021-03-04\",\n    \"doctor\": \"mjones\",\n    \"target\": \"open_slots\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{host}}:/appointment_service",
+              "host": [
+                "{{host}}"
+              ],
+              "port": "",
+              "path": [
+                "appointment_service"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "make_appointment_requests",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"slot\": {\n        \"doctor\": \"mjones\",\n        \"start\": \"1400\",\n        \"end\": \"1450\"\n    },\n    \"patien\": {\n        \"id\": \"jsmith\"\n    },\n    \"target\": \"make_appointment\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{host}}:/appointment_service",
+              "host": [
+                "{{host}}"
+              ],
+              "port": "",
+              "path": [
+                "appointment_service"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "level_1",
+      "item": [
+        {
+          "name": "get_slots_requests",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"open_slots\": {\n        \"date\": \"2021-03-04\"\n    }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{host}}/doctors/mjones",
+              "host": [
+                "{{host}}"
+              ],
+              "path": [
+                "doctors",
+                "mjones"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "make_appointment_requests",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"patient\": {\n        \"id\": \"jsmith\"\n    }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{host}}/slots/1234",
+              "host": [
+                "{{host}}"
+              ],
+              "path": [
+                "slots",
+                "1234"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "level_2",
+      "item": [
+        {
+          "name": "get_slots_requests",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{host}}/doctors/mjones/slots?date=20210304&status=open",
+              "host": [
+                "{{host}}"
+              ],
+              "path": [
+                "doctors",
+                "mjones",
+                "slots"
+              ],
+              "query": [
+                {
+                  "key": "date",
+                  "value": "20210304"
+                },
+                {
+                  "key": "status",
+                  "value": "open"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "make_appointment_requests",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"patient\": {\n        \"id\": \"jsmith\"\n    }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{host}}/slots/1234",
+              "host": [
+                "{{host}}"
+              ],
+              "path": [
+                "slots",
+                "1234"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "level_3",
+      "item": [
+        {
+          "name": "get_slots_requests",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{host}}/doctors/mjones/slots?date=20210304&status=open",
+              "host": [
+                "{{host}}"
+              ],
+              "path": [
+                "doctors",
+                "mjones",
+                "slots"
+              ],
+              "query": [
+                {
+                  "key": "date",
+                  "value": "20210304"
+                },
+                {
+                  "key": "status",
+                  "value": "open"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "make_appointment_requests",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"patient\": {\n        \"id\": \"jsmith\"\n    }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{host}}/slots/1234",
+              "host": [
+                "{{host}}"
+              ],
+              "path": [
+                "slots",
+                "1234"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          ""
+        ]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          ""
+        ]
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "host",
+      "value": "http://localhost:5000"
+    }
+  ]
+}

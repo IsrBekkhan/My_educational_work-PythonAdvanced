@@ -9,15 +9,17 @@
 </head>
 <body>
 
-<h1>Books:</h1>
 
 {% if books %}
+<h1>Books:</h1>
+
 <table class="customTable">
     <thead>
     <tr>
         <th>ID</th>
         <th>Title</th>
         <th>Author</th>
+        <th>Views</th>
     </tr>
     </thead>
     <tbody>
@@ -32,11 +34,68 @@
         <td>
             {{ book.author }}
         </td>
+        <td>
+            {{ book.counter }}
+        </td>
     </tr>
     {% endfor %}
     </tbody>
 </table>
+
+{% elif authors_books %}
+
+<table class="customTable">
+    <thead>
+    <tr>
+        <th>Список книг автора {{ authors_books[0][1] }}</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for book in authors_books %}
+    <tr>
+        <td>
+            {{ book[0] }}
+        </td>
+    </tr>
+    {% endfor %}
+    </tbody>
+</table>
+
+{% elif book_info %}
+
+<h1>Book info where book-id = {{ book_info[0] }}</h1>
+
+<table class="customTable">
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Title</th>
+        <th>Author</th>
+        <th>Views</th>
+    </tr>
+    </thead>
+    <tbody>
+
+    <tr>
+        <td>
+            {{ book_info[0] }}
+        </td>
+        <td>
+            {{ book_info[1] }}
+        </td>
+        <td>
+            {{ book_info[2] }}
+        </td>
+        <td>
+            {{ book_info[3] }}
+        </td>
+    </tr>
+
+    </tbody>
+</table>
+
 {% else %}
+
 <h2> Sorry, no books in DB.</h2>
 {% endif %}
 

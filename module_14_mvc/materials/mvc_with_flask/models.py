@@ -36,7 +36,7 @@ def init_db(initial_records: List[dict]) -> None:
                 CREATE TABLE `table_books` (
                     id INTEGER PRIMARY KEY AUTOINCREMENT, 
                     title, 
-                    author, 
+                    author
                 )
                 """
             )
@@ -61,3 +61,27 @@ def get_all_books() -> List[Book]:
             """
         )
         return [Book(*row) for row in cursor.fetchall()]
+
+
+def get_authors_books(author: str) -> List[tuple]:
+    with sqlite3.connect('table_books.db') as conn:
+        cursor: sqlite3.Cursor = conn.cursor()
+        cursor.execute(
+            """
+            SELECT title, author FROM table_books
+                WHERE author LIKE ?
+            """,
+            ('%' + author + '%', )
+        )
+        return cursor.fetchall()
+
+
+def get_total_amount() -> int:
+    with sqlite3.connect('table_books.db') as conn:
+        cursor: sqlite3.Cursor = conn.cursor()
+        cursor.execute(
+            """
+            SELECT COUNT(*) FROM table_books
+            """
+        )
+        return cursor.fetchone()[0]

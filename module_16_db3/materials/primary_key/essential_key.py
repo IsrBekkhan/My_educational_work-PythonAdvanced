@@ -16,7 +16,8 @@ DROP TABLE IF EXISTS 'post';
 CREATE TABLE 'post' (
     post_id INTEGER PRIMARY KEY AUTOINCREMENT,
     author VARCHAR(255) NOT NULL,
-    content TEXT NOT NULL DEFAULT ''
+    content TEXT NOT NULL DEFAULT '',
+    FOREIGN KEY (author) REFERENCES user (username) ON DELETE CASCADE
 );
 """
 

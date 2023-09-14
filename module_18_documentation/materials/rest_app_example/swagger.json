@@ -1,0 +1,72 @@
+{
+  "definitions": {
+    "Book": {
+      "properties": {
+        "author": {
+          "type": "string"
+        },
+        "id": {
+          "readOnly": true,
+          "type": "integer"
+        },
+        "title": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "author",
+        "title"
+      ],
+      "type": "object"
+    }
+  },
+  "info": {
+    "title": "BooksList",
+    "version": "1.0.0"
+  },
+  "paths": {
+    "/api/books": {
+      "get": {
+        "responses": {
+          "200": {
+            "description": "Books data",
+            "schema": {
+              "items": {
+                "$ref": "#/definitions/Book"
+              },
+              "type": "array"
+            }
+          }
+        },
+        "summary": "This is an endpoint for obtaining the books list.",
+        "tags": [
+          "books"
+        ]
+      },
+      "post": {
+        "parameters": [
+          {
+            "in": "body",
+            "name": "new book params",
+            "schema": {
+              "$ref": "#/definitions/Book"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "The book has been created",
+            "schema": {
+              "$ref": "#/definitions/Book"
+            }
+          }
+        },
+        "summary": "This is an endpoint for book creation.",
+        "tags": [
+          "books"
+        ]
+      }
+    }
+  },
+  "swagger": "2.0"
+}

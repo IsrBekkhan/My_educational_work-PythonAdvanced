@@ -1,0 +1,110 @@
+---
+definitions:
+  Book:
+    properties:
+      author_id:
+        type: integer
+      id:
+        readOnly: true
+        type: integer
+      title:
+        type: string
+    required:
+    - author_id
+    - title
+    type: object
+info:
+  title: BooksAndAuthors
+  version: 1.0.0
+paths:
+  "/api/books/{book_id}":
+    delete:
+      parameters:
+      - in: query
+        name: book id
+        required: true
+      responses:
+        '200':
+          description: Книга удалена из БД.
+          schema:
+            items:
+              "$ref": "#/definitions/Book"
+            type: array
+      summary: Запрос, удаляющий книгу из БД по id.
+      tags:
+      - books
+    get:
+      parameters:
+      - in: query
+        name: book id
+      responses:
+        '200':
+          description: A list of books
+          schema:
+            items:
+              "$ref": "#/definitions/Book"
+            type: array
+        '206':
+          description: The book
+          schema:
+            "$ref": "#/definitions/Book"
+      summary: Этот запрос возвращает список всех книг, или одну книгу по заданному
+        id.
+      tags:
+      - books
+    patch:
+      parameters:
+      - in: query
+        name: book id
+        required: true
+      - in: body
+        name: parameters of book for update
+        schema:
+          "$ref": "#/definitions/Book"
+      responses:
+        '201':
+          description: Информация о книге обновлена.
+          schema:
+            "$ref": "#/definitions/Book"
+        '400':
+          description: Ошибка в теле запроса
+      summary: Запрос, полностью или частично обновляющий информацию о существующей
+        книге по id.
+      tags:
+      - books
+    post:
+      parameters:
+      - in: body
+        name: new book parameters
+        schema:
+          "$ref": "#/definitions/Book"
+      responses:
+        '201':
+          description: Новая книга добавлена в БД.
+          schema:
+            "$ref": "#/definitions/Book"
+        '400':
+          description: Ошибка в теле запроса
+      summary: Запрос, добавляющий новую книгу.
+      tags:
+      - books
+    put:
+      parameters:
+      - in: query
+        name: book id
+        required: true
+      - in: body
+        name: parameters of book for update
+        schema:
+          "$ref": "#/definitions/Book"
+      responses:
+        '201':
+          description: Информация о книге обновлена.
+          schema:
+            "$ref": "#/definitions/Book"
+        '400':
+          description: Ошибка в теле запроса
+      summary: Запрос, обновляющий информацию о существующей книге по id.
+      tags:
+      - books
+swagger: '2.0'

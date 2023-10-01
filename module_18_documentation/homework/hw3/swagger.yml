@@ -1,0 +1,70 @@
+---
+definitions:
+  Request:
+    properties:
+      jsonrpc:
+        type: integer
+      method:
+        type: string
+        enum:
+          - calc.add
+          - calc.sub
+          - calc.div
+          - calc.mul
+      params:
+        type: object
+        properties:
+          a:
+            type: integer
+          b:
+            type: integer
+        required:
+          - a
+          - b
+      id:
+        type: integer
+    required:
+    - jsonrpc
+    - method
+    - params
+    type: object
+  Response:
+    properties:
+      id:
+        type: integer
+      jsonrpc:
+        type: string
+      result:
+        type: integer
+  Error:
+    properties:
+      id:
+        type: integer
+      jsonrpc:
+        type: integer
+      error:
+        type: object
+info:
+  title: BooksAndAuthors
+  version: 1.0.0
+paths:
+  "/api":
+    post:
+      parameters:
+      - in: body
+        name: Тело запроса
+        schema:
+          "$ref": "#/definitions/Request"
+      responses:
+        '200':
+          description: Математическая операция прошла успешно
+          schema:
+            "$ref": "#/definitions/Response"
+        '500':
+          description: Ошибка в теле запроса
+          schema:
+            "$ref": "#/definitions/Error"
+      summary: Запрос на математическую операцию
+      tags:
+      - calculator
+swagger: '2.0'

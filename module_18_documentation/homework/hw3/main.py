@@ -1,6 +1,10 @@
 import operator
+
 from flask import Flask
 from flask_jsonrpc import JSONRPC
+
+from flasgger import Swagger
+
 
 app = Flask(__name__)
 jsonrpc = JSONRPC(app, '/api', enable_web_browsable_api=True)
@@ -35,6 +39,24 @@ def add(a: float, b: float) -> float:
     }
     """
     return operator.add(a, b)
+
+
+@jsonrpc.method('calc.sub')
+def sub(a: float, b: float) -> float:
+    return operator.sub(a, b)
+
+
+@jsonrpc.method('calc.div')
+def div(a: float, b: float) -> float:
+    return operator.truediv(a, b)
+
+
+@jsonrpc.method('calc.mul')
+def mul(a: float, b: float) -> float:
+    return operator.mul(a, b)
+
+
+swagger = Swagger(app, template_file='swagger.yml')
 
 
 if __name__ == '__main__':

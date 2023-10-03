@@ -1,9 +1,17 @@
 ---
-definitions:
-  Request:
+components:
+  CalcRequest:
+    type: object
+    required:
+      - jsonrpc
+      - method
+      - params
+      - id
     properties:
       jsonrpc:
-        type: integer
+        type: string
+        default: 2.0
+        pattern: 2.0
       method:
         type: string
         enum:
@@ -15,37 +23,46 @@ definitions:
         type: object
         properties:
           a:
-            type: integer
+            type: number
           b:
-            type: integer
+            type: number
         required:
           - a
           - b
       id:
-        type: integer
-    required:
-    - jsonrpc
-    - method
-    - params
+        type: string
+  CalcResponse:
     type: object
-  Response:
+    required:
+      - jsonrpc
+      - id
     properties:
       id:
-        type: integer
+        type: string
       jsonrpc:
         type: string
+        default: 2.0
+        pattern: 2.0
       result:
-        type: integer
-  Error:
-    properties:
-      id:
-        type: integer
-      jsonrpc:
-        type: integer
+        type: number
       error:
         type: object
+        required:
+          - code
+          - message
+          - data
+        properties:
+          code:
+            - type
+            - integer
+          message:
+            - type
+            - string
+          data:
+            - type
+            - object
 info:
-  title: BooksAndAuthors
+  title: Simple Calculator
   version: 1.0.0
 paths:
   "/api":
@@ -54,17 +71,21 @@ paths:
       - in: body
         name: Тело запроса
         schema:
-          "$ref": "#/definitions/Request"
+          "$ref": "#/components/CalcRequest"
       responses:
         '200':
           description: Математическая операция прошла успешно
           schema:
-            "$ref": "#/definitions/Response"
-        '500':
-          description: Ошибка в теле запроса
+            "$ref": "#/components/CalcResponse"
+        '400':
+          description: Bad Request
           schema:
-            "$ref": "#/definitions/Error"
+            "$ref": "#/components/CalcResponse"
+        '500':
+          description: Internal Server Error
+          schema:
+            "$ref": "#/components/CalcResponse"
       summary: Запрос на математическую операцию
       tags:
-      - calculator
+      -
 swagger: '2.0'

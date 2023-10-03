@@ -3,11 +3,18 @@ import operator
 from flask import Flask
 from flask_jsonrpc import JSONRPC
 
-from flasgger import Swagger
+from flasgger import Swagger, APISpec, swag_from
+# from swagger_components import calc_request, calc_response, base_method_doc
 
 
 app = Flask(__name__)
 jsonrpc = JSONRPC(app, '/api', enable_web_browsable_api=True)
+
+spec = APISpec(
+    title="Simple Calc",
+    version="1.0.0",
+    openapi_version="2.0"
+)
 
 
 @jsonrpc.method('calc.add')

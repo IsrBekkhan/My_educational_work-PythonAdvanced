@@ -25,7 +25,8 @@ from models import (
 from schemas import BookSchema, BookSchemaPatch, AuthorSchema
 
 # imports for documentation
-from flasgger import APISpec, Swagger
+from flasgger import APISpec, Swagger, swag_from
+from swag_from_json import swag_from_json
 from apispec_webframeworks.flask import FlaskPlugin
 from apispec.ext.marshmallow import MarshmallowPlugin
 
@@ -46,6 +47,7 @@ api = Api(app)
 class BookList(Resource):
 
     @staticmethod
+    @swag_from('../books_documentation/books-get.yml')
     def get(book_id: int = None) -> tuple[dict, int]:
         schema = BookSchema()
         if book_id is not None:
@@ -53,6 +55,7 @@ class BookList(Resource):
         return schema.dump(get_all_books(), many=True), 200
 
     @staticmethod
+    @swag_from('../books_documentation/books-post.yml')
     def post() -> tuple[dict, int]:
         data = request.json
         schema = BookSchema()
@@ -65,6 +68,7 @@ class BookList(Resource):
         return schema.dump(book), 201
 
     @staticmethod
+    @swag_from('../books_documentation/books-put.yml')
     def put(book_id: int) -> tuple[dict, int]:
         data = request.json
         schema = BookSchema()
@@ -78,6 +82,7 @@ class BookList(Resource):
         return schema.dump(get_book_by_id(book_id)), 201
 
     @staticmethod
+    @swag_from('../books_documentation/books-patch.yml')
     def patch(book_id: int) -> tuple[dict, int]:
         data = request.json
         schema = BookSchemaPatch()
@@ -90,6 +95,7 @@ class BookList(Resource):
         return schema.dump(get_book_by_id(book_id)), 201
 
     @staticmethod
+    @swag_from('../books_documentation/books-delete.yml')
     def delete(book_id: int) -> tuple[dict, int]:
         schema = BookSchema()
         delete_book_by_id(book_id)
@@ -99,6 +105,7 @@ class BookList(Resource):
 class AuthorList(Resource):
 
     @staticmethod
+    @swag_from_json('../authors_documentation/authors_get.json')
     def get(author_id: int = None):
         author_schema = AuthorSchema()
         book_schema = BookSchema()
@@ -108,6 +115,7 @@ class AuthorList(Resource):
         return {"data": author_schema.dump(get_all_authors(), many=True)}, 206
 
     @staticmethod
+    @swag_from_json('../authors_documentation/authors_post.json')
     def post():
         data = request.json
         schema = AuthorSchema()
@@ -122,8 +130,8 @@ class AuthorList(Resource):
         author = add_author(author)
         return schema.dump(author), 201
 
-
     @staticmethod
+    @swag_from_json('../authors_documentation/authors_delete.json')
     def delete(author_id: int):
         return delete_author_by_id(author_id)
 
@@ -133,8 +141,7 @@ class AuthorList(Resource):
 #     definitions=[BookSchema, AuthorSchema]
 # )
 
-# swagger = Swagger(app, template_file='../authors.json')
-swagger = Swagger(app, template_file='../books.yml')
+swagger = Swagger(app)
 
 api.add_resource(BookList, '/api/books', '/api/books/<int:book_id>')
 api.add_resource(AuthorList, '/api/authors', '/api/authors/<int:author_id>')

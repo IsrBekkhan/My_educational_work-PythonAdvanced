@@ -1,0 +1,30 @@
+Запрос, обновляющий информацию о существующей книге по id.
+---
+definitions:
+  Book:
+    properties:
+      author_id:
+        type: integer
+      id:
+        readOnly: true
+        type: integer
+      title:
+        type: string
+    required:
+    - author_id
+    - title
+    type: object
+parameters:
+- in: query
+  name: book id
+  required: true
+responses:
+  '200':
+    description: Книга удалена из БД.
+    schema:
+      items:
+        "$ref": "#/definitions/Book"
+      type: array
+summary: Запрос, удаляющий книгу из БД по id.
+tags:
+- Books

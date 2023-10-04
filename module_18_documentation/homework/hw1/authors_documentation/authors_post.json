@@ -1,0 +1,53 @@
+{
+  "definitions": {
+    "Author": {
+      "properties": {
+        "first_name": {
+          "type": "string"
+        },
+        "id": {
+          "readOnly": true,
+          "type": "integer"
+        },
+        "last_name": {
+          "type": "string"
+        },
+        "middle_name": {
+          "type": "string"
+        },
+        "title": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "first_name",
+        "last_name"
+      ],
+      "type": "object"
+    }
+  },
+  "parameters": [
+    {
+      "in": "body",
+      "name": "new authors parameters",
+      "schema": {
+        "$ref": "#/definitions/Author"
+      }
+    }
+  ],
+  "responses": {
+    "201": {
+      "description": "\u041d\u043e\u0432\u044b\u0439 \u0430\u0432\u0442\u043e\u0440 \u0434\u043e\u0431\u0430\u0432\u043b\u0435\u043d \u0432 \u0411\u0414.",
+      "schema": {
+        "$ref": "#/definitions/Author"
+      }
+    },
+    "400": {
+      "description": "\u041e\u0448\u0438\u0431\u043a\u0430 \u0432 \u0442\u0435\u043b\u0435 \u0437\u0430\u043f\u0440\u043e\u0441\u0430"
+    }
+  },
+  "summary": "\u0417\u0430\u043f\u0440\u043e\u0441, \u0434\u043e\u0431\u0430\u0432\u043b\u044f\u044e\u0449\u0438\u0439 \u043d\u043e\u0432\u043e\u0433\u043e \u0430\u0432\u0442\u043e\u0440\u0430.",
+  "tags": [
+    "Authors"
+  ]
+}

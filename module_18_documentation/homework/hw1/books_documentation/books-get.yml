@@ -1,0 +1,32 @@
+Этот запрос возвращает список всех книг, или одну книгу по заданному id.
+---
+definitions:
+  Book:
+    properties:
+      author_id:
+        type: integer
+      id:
+        readOnly: true
+        type: integer
+      title:
+        type: string
+    required:
+    - author_id
+    - title
+    type: object
+parameters:
+- in: query
+  name: book id
+responses:
+  '200':
+    description: A list of books
+    schema:
+      items:
+        "$ref": "#/definitions/Book"
+      type: array
+  '206':
+    description: The book
+    schema:
+      "$ref": "#/definitions/Book"
+tags:
+- Books

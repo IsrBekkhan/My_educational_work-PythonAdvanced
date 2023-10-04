@@ -1,0 +1,34 @@
+Запрос, полностью или частично обновляющий информацию о существующей книге по id.
+---
+definitions:
+  Book:
+    properties:
+      author_id:
+        type: integer
+      id:
+        readOnly: true
+        type: integer
+      title:
+        type: string
+    required:
+    - author_id
+    - title
+    type: object
+parameters:
+- in: query
+  name: book id
+  required: true
+- in: body
+  name: parameters of book for update
+  schema:
+    "$ref": "#/definitions/Book"
+responses:
+  '201':
+    description: Информация о книге обновлена.
+    schema:
+      "$ref": "#/definitions/Book"
+  '400':
+    description: Ошибка в теле запроса
+tags:
+- Books
+

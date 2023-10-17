@@ -1,9 +1,9 @@
 from sqlalchemy import create_engine, Column, Integer, String, Date, Float, Boolean, DateTime
 from sqlalchemy.orm import sessionmaker, declarative_base
 from sqlalchemy.ext.hybrid import hybrid_property
+import sqlalchemy
 
 from datetime import datetime, timedelta
-
 from typing import Dict, Any, List
 
 
@@ -94,14 +94,19 @@ class ReceivingBook(Base):
 
     @hybrid_property
     def count_date_with_book(self):
-        if self.date_of_return is not None:
+        end_date = self.date_of_return or datetime.now()
+        return (end_date - self.date_of_issue).days
 
-            if self.date_of_return > datetime.now():
-                delta: timedelta = self.date_of_return - datetime.now()
-                return delta.days
-
-            delta: timedelta = self.date_of_return - self.date_of_issue
-            return delta.days
+    @count_date_with_book.expression
+    def count_date_with_book(cls):
+        """
+        Количество дней, которое читатель держит/держал книгу у себя
+        """
+        end_date = sqlalchemy.case(
+            (cls.date_of_return == None, sqlalchemy.func.now()),
+            else_=cls.date_of_return
+        )
+        return sqlalchemy.func.julianday(end_date) - sqlalchemy.func.julianday(cls.date_of_issue)
 
     @classmethod
     def all_debtors(cls) -> List[dict]:
@@ -141,5 +146,8 @@ class ReceivingBook(Base):
 
 
 if __name__ == '__main__':
-    result_ = session.query(ReceivingBook).filter(ReceivingBook.count_date_with_book < 10).one()
+    result_ = session.query(ReceivingBook, ReceivingBook.count_date_with_book).all()
+
+    for line, row in result_:
+        print(line.to_json(), row)
 

@@ -12,9 +12,9 @@ app = Celery(
 
 @app.on_after_configure.connect
 def setup_periodic_tasks(sender, **kwargs):
-    sender.add_periodic_task(5.0, check_cat.s())
+    sender.add_periodic_task(2, check_cat.s())
     sender.add_periodic_task(
-        crontab(hour=7, minute=30, day_of_week=1),
+        crontab(hour=12, minute=4),
         check_cat.s()
     )
 

@@ -11,7 +11,7 @@ logging.basicConfig(level=logging.INFO)
 logger: logging.Logger = logging.getLogger(__name__)
 
 URL: str = 'https://cataas.com/cat'
-OUT_PATH: str = 'temp/{}.jpeg'
+OUT_PATH: str = 'images/{}.jpeg'
 
 
 def get_image(url: str, result_path: str) -> None:
@@ -61,6 +61,6 @@ def load_images_multiprocessing() -> None:
 
 
 if __name__ == '__main__':
-    if not os.path.exists('./temp'):
-        os.mkdir('./temp')
+    if not os.path.exists('./images'):
+        os.mkdir('./images')
     load_images_multiprocessing()

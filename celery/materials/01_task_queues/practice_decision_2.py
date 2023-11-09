@@ -10,6 +10,7 @@ class Task:
     func: Callable
     args: Tuple = field(default_factory=tuple)
     kwargs: Dict = field(default_factory=dict)
+    priority: int = field(default=1)
 
     def execute(self) -> None:
         self.func(*self.args, **self.kwargs)
@@ -36,30 +37,49 @@ class TaskQueue:
 
     def add_task(self, task: Task) -> None:
         print('Добавлена задача:', task)
-        self.queue.append(task)
+        task_index = 0
+
+        for task_object in self.queue:
+
+            if task_object.priority < task.priority:
+                task_index = self.queue.index(task_object)
+                self.queue.insert(task_index, task)
+                break
+        else:
+            self.queue.append(task)
+
+        if not self.queue:
+            self.queue.insert(task_index, task)
+
 
     def execute_tasks(self) -> None:
         while self.queue:
             task = self.queue.popleft()
-            print('Исполняется задача:', task)
+            print('Исполняется задача:', task, task.priority)
             task.execute()
         print('Все задачи были успешно выполнены')
+        self.queue.clear()
 
 
 if __name__ == '__main__':
     queue = TaskQueue()
+
     queue.add_task(Task(
         func=time.sleep,
-        args=(1,)
+        args=(1,),
+        priority=1
     ))
     queue.add_task(Task(
         func=print,
         args=('Hello', 'World'),
-        kwargs={'sep': '_'}
+        kwargs={'sep': '_'},
+        priority=3
     ))
     queue.add_task(Task(
         func=math.factorial,
-        args=(50,)
+        args=(50,),
+        priority=2
     ))
+
     queue.execute_tasks()
 

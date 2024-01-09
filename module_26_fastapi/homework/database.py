@@ -12,3 +12,6 @@ async_session = sessionmaker(
 
 session = async_session()
 Base = declarative_base()
+
+a = 'get_test'.title()
+print(a)

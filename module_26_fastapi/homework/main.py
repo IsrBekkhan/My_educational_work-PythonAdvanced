@@ -1,9 +1,11 @@
-from fastapi import FastAPI, Path
+from fastapi import FastAPI, status
+
 from sqlalchemy.future import select
+from sqlalchemy.orm import selectinload
 
-from typing import List, Any
+from typing import List
 
-from database import engine, session
+from database import engine, session, Base
 import models
 from schemas import RecipeDetails, RecipeViews
 
@@ -14,7 +16,7 @@ app = FastAPI()
 @app.on_event('startup')
 async def startup_event():
     async with engine.begin() as conn:
-        await conn.run_sync(models.Base.metadata.create_all)
+        await conn.run_sync(Base.metadata.create_all)
     await session.commit()
 
 
@@ -24,10 +26,10 @@ async def shutdown_event():
     await engine.dispose()
 
 
-@app.post('/recipes', response_model=RecipeDetails)
+@app.post('/recipes', response_model=RecipeDetails, status_code=status.HTTP_201_CREATED)
 async def post_recipe(recipe: RecipeDetails) -> models.Recipe:
     new_recipe = models.Recipe(
-        name=recipe.name,
+        name=recipe.name.lower(),
         cooking_time=recipe.cooking_time,
         description=recipe.description,
         ingredients=[
@@ -37,6 +39,7 @@ async def post_recipe(recipe: RecipeDetails) -> models.Recipe:
     async with session.begin():
         await session.merge(new_recipe)
     await session.commit()
+    await session.close()
 
     return new_recipe
 
@@ -44,28 +47,31 @@ async def post_recipe(recipe: RecipeDetails) -> models.Recipe:
 @app.get('/recipes', response_model=List[RecipeViews])
 async def get_recipes() -> List[models.Recipe]:
     res = await session.execute(
-        select(
-            models.Recipe.name,
-            models.Recipe.cooking_time,
-            models.Recipe.views_count
-        )
+        select(models.Recipe)
     )
-    recipes_list = res.unique().scalars().all()
-
-    for recipe in recipes_list:
-        print(dir(recipe))
-
-    return recipes_list
-
-
-@app.get('/recipes/{name}', response_model=RecipeDetails)
-async def get_recipe(recipe_name: str) -> models.Recipe:
-    res = await session.execute(
-        select(models.Recipe).where(models.Recipe.name.like(recipe_name))
-    )
-    recipe = res.scalars().first()
-
-    print(RecipeDetails.from_orm(recipe))
+    recipe = res.unique().scalars().all()
+    await session.close()
 
     return recipe
 
+
+@app.get('/recipes/{recipe_name}', response_model=RecipeDetails)
+async def get_recipe(recipe_name: str) -> models.Recipe:
+
+    res = await session.execute(
+        select(models.Recipe).options(
+            selectinload(models.Recipe.ingredients)
+        ).where(models.Recipe.name == recipe_name.lower())
+    )
+
+    recipe: models.Recipe = res.scalars().first()
+
+    recipe.views_count += 1
+    await session.close()
+
+    async with session.begin():
+        await session.merge(recipe)
+    await session.commit()
+    await session.close()
+
+    return recipe

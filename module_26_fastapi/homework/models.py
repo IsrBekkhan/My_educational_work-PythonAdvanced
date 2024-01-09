@@ -34,8 +34,7 @@ class Recipe(Base):
 
     ingredients = relationship('Ingredient',
                                secondary=integration_table,
-                               cascade='all',
-                               lazy='joined')
+                               cascade='all')
 
 
 

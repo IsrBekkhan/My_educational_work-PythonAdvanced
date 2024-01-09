@@ -1,10 +1,12 @@
-from schemas import RecipeDetails, RecipeViews
-from models import Recipe, Ingredient
-from database import Base, session, engine
+from module_26_fastapi.homework.schemas import RecipeDetails, RecipeViews
+from module_26_fastapi.homework.models import Recipe, Ingredient
+from module_26_fastapi.homework.database import Base, session, engine
+
 import asyncio
-from sqlalchemy.ext.asyncio import AsyncResult
+from sqlalchemy.ext.asyncio import AsyncResult, AsyncScalarResult
 
 from sqlalchemy.future import select
+from sqlalchemy.orm import selectinload
 
 model_dict = {
     "name": "Другой шашлык 2",
@@ -33,7 +35,7 @@ async def db_add():
 
 async def db_get():
     res = await session.execute(
-        select(Recipe).where(Recipe.name.like('Шашлык'))
+        select(Recipe).where(Recipe.name == 'шашлык'.title())
     )
     model = res.scalars().first()
     print(RecipeViews.from_orm(model))
@@ -51,3 +53,4 @@ async def main():
 
 
 asyncio.run(main())
+

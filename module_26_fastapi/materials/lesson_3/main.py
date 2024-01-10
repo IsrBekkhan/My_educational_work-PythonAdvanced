@@ -14,6 +14,7 @@ app = FastAPI()
 async def shutdown():
     async with engine.begin() as conn:
         await conn.run_sync(models.Base.metadata.create_all)
+    await session.commit()
 
 
 @app.on_event("shutdown")
@@ -27,6 +28,7 @@ async def books(book: schemas.BookIn) -> models.Book:
     new_book = models.Book(**book.dict())
     async with session.begin():
         session.add(new_book)
+    await session.commit()
     return new_book
 
 

@@ -35,10 +35,9 @@ async def say_hello(
     return {'message': f'{message}, {user}'}
 
 
-
 class Author(BaseModel):
     name: str
-    born_year: int = Field(..., lt=2015)
+    born_year: int = Field(..., gt=2000)
 
 
 class Book(BaseModel):
@@ -65,3 +64,13 @@ async def post_book(
                    + publisher_message
                    + f" I definitely will read {book.title}!"
     }
+
+
+@app.post('/authors')
+async def post_authors(
+        author: Author
+) -> Dict[str, str]:
+    return {
+        'message': f"Мы не знали про {author.name}, родившийся {author.born_year} года"
+    }
+

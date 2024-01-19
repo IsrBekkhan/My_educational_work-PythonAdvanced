@@ -25,4 +25,5 @@ services:
       - '${POSTGRES_PORT}:5432'
     volumes:
       - ./postgres_db/:/var/lib/postgresql/data
-      - ./postgresql.conf:/etc/postgresql/postgresql.conf
+#      - ./postgresql.conf:/etc/postgresql/postgresql.conf
+      - ./postgresql.conf:/var/lib/postgresql/data/postgresql.conf

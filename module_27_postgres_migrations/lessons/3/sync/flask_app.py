@@ -6,7 +6,7 @@ from typing import Dict, Any
 from sqlalchemy.dialects.postgresql import insert
 
 app = Flask(__name__)
-engine = create_engine('postgresql+psycopg2://admin:admin@localhost')
+engine = create_engine('postgresql+psycopg2://admin:admin@localhost', echo=True)
 Base = declarative_base()
 Session = sessionmaker(bind=engine)
 session = Session()
@@ -70,6 +70,8 @@ def delete_product_handler(id: int):
     deleted_row = session.execute(result).fetchone()
     if deleted_row:
         deleted_row_json = dict(id=deleted_row[0], title=deleted_row[1])
+        session.commit()
+
         return jsonify(delete_row_attrs=deleted_row_json)
 
 
@@ -88,7 +90,7 @@ def insert_product_handler():
                                set_=dict(title='обновленный продукт'))
     session.execute(do_update_stmt)
     session.commit()
-    return '',200
+    return '', 200
 
 
 @app.route('/products', methods=['GET'])
@@ -99,6 +101,8 @@ def get_products_handler():
         product_obj = p.to_json()
         product_obj['user'] = p.user.to_json()
         products_list.append(product_obj)
+
+    session.commit()
     return jsonify(products_list)
 
 

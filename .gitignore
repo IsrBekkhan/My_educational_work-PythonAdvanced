@@ -139,3 +139,5 @@ dmypy.json
 .swp
 
 /for_self_examination/
+/module_27_postgres_migrations/hw/hw1/postgres_db/
+/module_27_postgres_migrations/hw/hw2_3/postgres_db/

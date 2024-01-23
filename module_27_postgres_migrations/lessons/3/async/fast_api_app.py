@@ -74,8 +74,9 @@ async def startup():
 async def delete_product_handler(product_id: int):
     async with async_session() as session:
         async with session.begin():
-            q = select(Product).where(Product.id == product_id)
-            product = await session.execute()
+            product = await session.execute(
+                select(Product).where(Product.id == product_id)
+            )
             product = product.scalar_one()
             await session.delete(product)
             await session.commit()
@@ -110,4 +111,4 @@ async def get_products_handler():
 
 
 if __name__ == '__main__':
-    uvicorn.run("fast_api_app:app.py", port=1111, host='127.0.0.1')
+    uvicorn.run("fast_api_app:src", port=1111, host='127.0.0.1')

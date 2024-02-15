@@ -4,7 +4,7 @@ import pytest
 @pytest.fixture
 def input_value() -> int:
     _input = 5
-    return input
+    return _input
 
 
 @pytest.mark.math

@@ -1,0 +1,40 @@
+workflow:
+  rules:
+    - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
+    - if: $CI_COMMIT_BRANCH
+
+image: python:3.10
+
+
+stages:
+  - test
+
+before_script:
+  - pip install -r requirements.txt
+    
+
+unittest:
+  stage: test
+  script:
+    - uvicorn main:app &> /dev/null &
+    - pytest
+
+mypy:
+  stage: test
+  script:
+    - mypy .
+
+black:
+  stage: test
+  script:
+    - black --check --diff .
+
+isort:
+  stage: test
+  script:
+    - isort --check-only --diff --profile black .
+
+flake8:
+  stage: test
+  script:
+    - flake8 --extend-ignore=E501 .

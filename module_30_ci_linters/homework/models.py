@@ -1,5 +1,7 @@
-from sqlalchemy import Column, ForeignKey, Integer, String, Table
-from sqlalchemy.orm import relationship
+from typing import List
+
+from sqlalchemy import Column, ForeignKey, String, Table
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from database import Base
 
@@ -14,15 +16,17 @@ integration_table = Table(
 class Ingredient(Base):
     __tablename__ = "ingredients"
 
-    name = Column(String(50), primary_key=True, nullable=False)
+    name: Mapped[str] = mapped_column(String(50), primary_key=True)
 
 
 class Recipe(Base):
     __tablename__ = "recipes"
 
-    name = Column(String(50), primary_key=True, nullable=False)
-    cooking_time = Column(Integer, nullable=False)
-    description = Column(String(300), default="", nullable=True)
-    views_count = Column(Integer, default=0, nullable=False)
+    name: Mapped[str] = mapped_column(String(50), primary_key=True)
+    cooking_time: Mapped[int]
+    description: Mapped[str] = mapped_column(String(300), default="")
+    views_count: Mapped[int] = mapped_column(default=0)
 
-    ingredients = relationship("Ingredient", secondary=integration_table, cascade="all")
+    ingredients: Mapped[List[Ingredient]] = relationship(
+        secondary=integration_table, cascade="all"
+    )

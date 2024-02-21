@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Optional, Sequence
 
 from fastapi import FastAPI, status
 from sqlalchemy.future import select
@@ -43,7 +43,7 @@ async def post_recipe(recipe: RecipeDetails) -> models.Recipe:
 
 
 @app.get("/recipes", response_model=List[RecipeViews])
-async def get_recipes() -> List[models.Recipe]:
+async def get_recipes() -> Sequence[models.Recipe]:
     res = await session.execute(select(models.Recipe))
     recipe = res.unique().scalars().all()
     await session.close()
@@ -52,7 +52,7 @@ async def get_recipes() -> List[models.Recipe]:
 
 
 @app.get("/recipes/{recipe_name}", response_model=RecipeDetails)
-async def get_recipe(recipe_name: str) -> models.Recipe:
+async def get_recipe(recipe_name: str) -> Optional[models.Recipe]:
 
     res = await session.execute(
         select(models.Recipe)
@@ -60,14 +60,17 @@ async def get_recipe(recipe_name: str) -> models.Recipe:
         .where(models.Recipe.name == recipe_name.lower())
     )
 
-    recipe: models.Recipe = res.scalars().first()
+    recipe: models.Recipe | None = res.scalars().first()
 
-    recipe.views_count += 1
-    await session.close()
+    if recipe:
+        recipe.views_count += 1
+        await session.close()
 
-    async with session.begin():
-        await session.merge(recipe)
-    await session.commit()
-    await session.close()
+        async with session.begin():
+            await session.merge(recipe)
+        await session.commit()
+        await session.close()
 
-    return recipe
+        return recipe
+
+    return None
